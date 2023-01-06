@@ -1,0 +1,80 @@
+﻿@model CoursesViewModel
+@{
+    Layout="_AdminLayout";
+}
+<div class="d-flex justify-content-center">
+    <h3 class="mt-4 mb-4 text-primary"style="border-bottom: 4px solid #007bff;">Add Courses</h3>
+</div>
+<form asp-action="AddCourses" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="NameCourses" class="control-label"></label>
+        <input asp-for="NameCourses" class="form-control" />
+        <span asp-validation-for="NameCourses" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Degree" class="control-label"></label>
+        <input asp-for="Degree" class="form-control" />
+        <span asp-validation-for="Degree" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MinDegree" class="control-label"></label>
+        <input asp-for="MinDegree" class="form-control" />
+        <span asp-validation-for="MinDegree" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Image" class="control-label"></label>
+        <input required asp-for="Image"  class="form-control" />
+        <span  asp-validation-for="Image" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-success" />
+        <a asp-action="CoursesDept" class="btn btn-outline-primary">Add Courses Department</a>
+    </div>
+</form>
+<div class="d-flex justify-content-center">
+    <h3 class="mt-4 mb-4 text-primary"style="border-bottom: 4px solid #007bff;">All Courses</h3>
+</div>
+<table class="table table-bordered ">
+    <thead class="table-dark text-center">
+        <th>Name Courses</th>
+        <th>Description</th>
+        <th>Degree</th>
+        <th>MinDegree</th>
+        <th>Image</th>
+        <th>Options</th>
+    </thead>
+    <tbody >
+        @foreach (var item in ViewBag.ListCourses as List<Courses>)
+    {
+       <tr class="table table-hover"> 
+           <td>
+               @item.Name
+           </td>
+           <td class="w-25">
+               @item.Description
+           </td>
+           <td class="">
+               @item.Degree
+           </td>
+           <td class="">
+               @item.MinDegree
+           </td>
+           <td class="w-25 text-center">
+               <img width="100" height="50" src="~/image/Courses/@item.Image">
+           </td>
+           <td class="text-center" >
+               <a asp-action="EditCourse" asp-route-id="@item.Id" class="btn btn-primary text-white">Edit</a>
+               <a asp-action="DeletCourse" asp-route-id="@item.Id" class="btn btn-danger text-white">Delet</a>
+           </td>
+       </tr>
+    }
+    </tbody>
+</table>
+@section scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

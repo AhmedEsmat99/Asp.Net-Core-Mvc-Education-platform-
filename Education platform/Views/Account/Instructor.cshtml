@@ -1,0 +1,150 @@
+﻿@model Education_platform.ViewModels.InstructorViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ProjectDb db = new ProjectDb();
+    ViewData["Title"] = "Instructor";
+    SelectList ListDept = new SelectList(ViewBag.ListDept, "Id", "Name");
+}
+<div class="d-flex justify-content-center">
+    <h3 class="mt-4 mb-4 text-primary"style="border-bottom: 4px solid #007bff;">Add Instructor</h3>
+</div>
+<form asp-action="AddInstructor" enctype="multipart/form-data">
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Age" class="control-label"></label>
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+        <label asp-for="Phone" class="control-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Gender" class="control-label"></label><br>
+            <div class="d-flex justify-content-around">
+                <div>
+                    <label for="male">Male</label>
+                    <input type="radio"id="male" asp-for="Gender"  value="Male" />
+                </div>
+                <div>
+                    <label for="female">female</label>
+                    <input type="radio"id="female" asp-for="Gender" value="Female" />
+                </div>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+        <label asp-for="Adress" class="control-label"></label>
+        <input  asp-for="Adress"  class="form-control" />
+        <span  asp-validation-for="Adress" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Image" class="control-label"></label>
+            <input required asp-for="Image" class="form-control" />
+            <span  asp-validation-for="Image" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+        <label asp-for="Idept" class="control-label"></label>
+        <select asp-for="Idept" asp-items="ListDept" class="form-control" >
+            <option disabled selected>Select Department</option>
+        </select>
+        <span  asp-validation-for="Idept" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Email" class="control-label"></label>
+            <input required asp-for="Email" class="form-control" />
+            <span  asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+        <label asp-for="Password" class="control-label"></label>
+        <input required asp-for="Password"  class="form-control" />
+        <span  asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="ConfirmPassword" class="control-label"></label>
+            <input required asp-for="ConfirmPassword" class="form-control" />
+            <span  asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-success" />
+    </div>
+</form>
+<div class="d-flex justify-content-center">
+    <h3 class="mt-4 mb-4 text-primary"style="border-bottom: 4px solid #007bff;">All Instructor</h3>
+</div>
+<table class="table table-bordered ">
+    <thead class="table-dark text-center">
+        <th>Name</th>
+        <th>Age</th>
+        <th>Phone</th>
+        <th>Gender</th>
+        <th>Address</th>
+        <th>Image</th>
+        <th>Department</th>
+        <th>Courses</th>
+        <th>Options</th>
+    </thead>
+    <tbody >
+        @foreach (var item in ViewBag.ListInst as List<Instructor>)
+       {
+           <tr class="table table-hover"> 
+               <td>
+                   @item.Name
+               </td>
+               <td>
+                   @item.Age
+               </td>
+               <td class="">
+                   @item.Phone
+               </td>
+               <td class="">
+                   @item.Gender
+               </td>
+               <td class="">
+                   @item.Adress
+               </td>
+               <td>
+                   <img width="70"hight="70" src="~/image/Instructor/@item.Image">
+               </td>
+               <td class="">
+                   @{Department dept = db.Departments.FirstOrDefault(d=>d.Id == item.IdDept); @dept.Name}
+               </td>
+               <td class="">
+                    @{
+                        var InstCrs = db.InstructorCourses.Where(i=>i.InstructorId==item.Id).ToList();
+                        foreach (var courses in InstCrs)
+                        {
+                            var Crs = db.Courses.FirstOrDefault(d=> d.Id == courses.CoursesId);
+                            @Crs.Name
+                            <br />
+                        }
+                    }
+               </td>
+               <td class="text-center w-25" >
+                   <a asp-action="EditInstructor" asp-route-id="@item.Id" class="btn btn-primary text-white mb-3">Edit</a>
+                   <a asp-action="DeletInstructor" asp-route-id="@item.Id" class="btn btn-danger text-white mb-3">Delet</a>
+                   <a asp-action="AddCoursesInstructor" asp-route-id="@item.Id" class="btn btn-primary text-white">AddCoursesInstructor</a>
+               </td>
+           </tr>
+       }
+    </tbody>
+</table>
+@section scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

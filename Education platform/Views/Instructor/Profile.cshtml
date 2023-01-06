@@ -1,0 +1,29 @@
+﻿ @model Instructor
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_InstructorLayout";
+}
+@section NavbarLinks{
+    <li class=""><a class="nav-link " asp-action="index"asp-controller="Instructor">Home</a></li>
+        <li class=""><a class="nav-link active" asp-action="Profile"asp-controller="Instructor" >Profile</a></li>
+        <li class=""><a class="nav-link" asp-action="Student" asp-route-id="@Model.Id" asp-controller="Instructor">Student</a></li>
+}
+<section>
+    <div class="container">
+        <div class="row align-items-center ">
+            <div class="col-lg-4 d-flex flex-column">
+                <img class="img-thumbnail w-100" src="~/image/Instructor/@Model.Image" />
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mt-3"> Edit data </a>
+            </div>
+            <div class="col-lg-8">
+
+            <h4 class="ml-5 text-black-50">Name : @Model.Name</h4>
+            <h4 class="ml-5 text-black-50">Email : @Model.Email</h4>
+            <h4 class="ml-5 text-black-50">Phone : @Model.Phone</h4>
+            <h4 class="ml-5 text-black-50">Adress : @Model.Adress</h4>
+            <h4 class="ml-5 text-black-50">Age : @Model.Age</h4>
+            <h4 class="ml-5 text-black-50">Gender : @Model.Gender</h4>
+            </div>
+        </div>
+    </div>
+</section>

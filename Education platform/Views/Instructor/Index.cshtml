@@ -1,0 +1,102 @@
+﻿@model Instructor
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_InstructorLayout";
+    ProjectDb db = new ProjectDb();
+    var result = db.coursesDepartments.Where(cd => cd.DeaprtmentId == Model.IdDept).ToList();
+
+}
+
+   <style>
+       @section Style{
+           .header{height: 45rem;}
+           .header div{background:url(/image/Instructor/Page/BackgroundInst.jpg);background-size: cover;background-position: center}
+           .header h5{margin-bottom:15rem}
+           .header h3{text-shadow: -1px 3px 3px black;}
+           .AddCrs .title h2{width: max-content;}  
+       }
+   </style>
+   @section NavbarLinks{
+       <li class=""><a class="nav-link active" asp-action="index"asp-controller="Instructor">Home</a></li>
+        <li class=""><a class="nav-link" asp-action="Profile"asp-controller="Instructor" asp-route-id="@Model.Id">Profile</a></li>
+        <li class=""><a class="nav-link" asp-action="Student" asp-route-id="@Model.Id" asp-controller="Instructor">Student</a></li>
+   }
+  <div class="container" >
+      @section Header{
+        <section class="header">
+            <div class="h-100 d-flex flex-column justify-content-center align-items-center">
+                <h3 class="text-white">
+                    Wellcome : @User.Identity.Name
+                </h3>
+                <h5 class="w-75 text-center text-black-50">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam inventore asperiores repellat at voluptatum nisi ut 
+                    quibusdam, soluta dolor sit numquam doloribus quas odit non qui blanditiis ab eligendi. Illum.
+                </h5>
+            </div>
+        </section>
+      }
+    <section class="AddCrs container pt-5 pb-5">
+        <div class="title mb-3">
+            <h2 class="border-bottom border-success ">Add Courses</h2>
+        </div>
+        <div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Add the courses you want to explain</h4>
+                </div>
+                <div class="mt-4 mb-5">
+                    <div class="row justify-content-center ">
+                        <form asp-action="AddCoursesInstructor" class="col-md-8 d-flex ">
+                            <input type="hidden" value="@Model.Id" name="IdInst"/>
+                            <select name="IdCrs" required  class="form-control ">
+                                <option selected disabled >Select Course</option>
+                                @foreach(var item in result)
+                                {
+                                <option value="@item.CoursesId" >
+                                    @{Courses C = db.Courses.FirstOrDefault(c => c.Id == item.CoursesId);} @C.Name
+                                </option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-success ml-5">Add Course</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+         </div>
+         @*All Instructor Courses*@
+         <div class="Show-courses mt-5">
+             <div class="title text-center">
+                 <h4>All Instructor Courses</h4>
+             </div>
+             <table class="table table-bordered text-center table-striped border-primary table-light">
+                 <thead class="table-dark">
+                     <th>NameCourse</th>
+                     <th>Delet</th>
+                 </thead>
+                 <tbody class="">
+                    @foreach (var item in ViewBag.InstCourse as List<InstructorCourses>)
+                    {
+                        <tr>
+                            <td>
+                                @{Courses Crs = db.Courses.FirstOrDefault(c => c.Id == item.CoursesId);}@Crs.Name
+                             </td>
+                            <td>
+                                <form asp-action="DeletCourse">
+                                <input type="hidden" name="IdCrs" value="@item.CoursesId">
+                                <input type="hidden" name="IdInst" value="@Model.Id">
+                                <button type="submit" class="btn btn-danger" >Delet</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                 </tbody>
+             </table>
+             <div class="text-center">
+                <a asp-action="DeletAllCrs" asp-route-id="@Model.Id" class="btn btn-danger text-white ">Delet all</a>
+             </div>
+         </div>
+    </section>
+  </div>
+@section Scripts{
+    <script src="~/js/bootstrap5.min.js"></script>
+}

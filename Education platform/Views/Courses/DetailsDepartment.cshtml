@@ -1,0 +1,87 @@
+﻿@{
+	Layout = "_StudentLayout";    
+	ViewData["Title"] = "DetailsDepartment";
+	ProjectDb db = new ProjectDb();
+	int iddept = @ViewBag.idDept;
+	Department Dept = db.Departments.FirstOrDefault(d => d.Id == iddept );
+	int IdInst = ViewBag.idInst;
+	Instructor Inst = db.Instructors.FirstOrDefault(I => I.Id == IdInst);
+}
+
+@section NavbarLinks{
+	@if (User.Identity.IsAuthenticated)
+	{
+		<li><a asp-action="Index" asp-controller="Student">Home</a></li>
+		<li><a href="#">About us</a></li>
+		<li><a  asp-action="Index" asp-route-id="@Model.Id">Courses</a></li>
+		<li><a style="color:#007bff">Details</a></li>
+		<li><a  asp-action="Profile" asp-route-id="@Model.Id" asp-controller="Student">Profile</a></li>
+	}
+	else
+	{
+		<li><a asp-action="Index" asp-controller="Student">Home</a></li>
+		<li><a href="#">About us</a></li>
+		<li><a  asp-action="Index" >Courses</a></li>
+		<li><a style="color:#007bff">Details</a></li>
+	}
+}
+@section LinkExist{
+	Courses / Details
+}	
+
+<section class="">
+	<div class="container aos-init aos-animate" data-aos="fade-up">
+		<div class="row"><div class="col-lg-8">
+			<img height="300" src="~/image/Department/@Dept.image" class="w-100 mb-3" alt="">
+			<h3>Description Department : @Dept.Name </h3>
+			
+			<p> 
+				@Dept.Description
+			</p>
+			</div>
+			<div class="col-lg-4">
+				<div class="w-100 bg-light mb-3 p-3 row ml-0">
+					<div class="col-4">
+					<img width="100" src="~/image/Instructor/@Inst.Image" />
+					</div>
+					<div class="col-8 d-flex justify-content-center flex-column align-items-center">
+					<h5 class="text-black">Name : @Inst.Name</h5>
+					<h6 class="">Age : @Inst.Age</h6>
+					</div>
+				</div>
+				<div class="bg-light d-flex justify-content-between align-items-center">
+					<h5 class="p-3">@Dept.Name</h5>
+				</div>
+				<div class=" bg-light mt-3 course-info d-flex justify-content-between align-items-center">
+					<h5 class="p-3">Price : Free </h5>
+				</div>
+				<div class="bg-light mt-3 course-info d-flex flex-column ">
+					<h5 class="p-3">Courses : </h5>
+					@{var AllCourse = db.InstructorCourses.Where(c => c.InstructorId == Inst.Id).ToList();}
+					@foreach (var courses in AllCourse)
+					{
+						var Crs = db.Courses.FirstOrDefault(c => c.Id == courses.CoursesId);
+						<p class="ml-5 text-primary"> @Crs.Name </p>
+					}
+				</div>
+				<div class="d-flex justify-content-center">
+					@if(User.Identity.IsAuthenticated)
+					{
+						@if(ViewData["exsist"] != null)
+						{
+							<a  class="btn btn-primary text-white mt-5">Done Registration</a>
+						}
+						else
+						{
+							<a asp-action="RegisterCourses" asp-route-IdDept="@Dept.Id" asp-route-IdInst="@Inst.Id" asp-route-IdStd="@Model.Id" class="btn btn-success mt-5">Register Now</a>
+						}
+					}
+					else
+					{
+						<a asp-action="Register" asp-controller="Student" class="btn btn-success mt-5">Register Now</a>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,104 @@
+﻿@model StudentViewModel
+@{
+	Layout = "_studentLayout";
+	ProjectDb db = new ProjectDb();
+}
+@section NavbarLinks{
+    <li><a asp-action="Index">Home</a></li>
+	<li><a href="#">About us</a></li>
+	<li><a asp-action="Index"asp-controller="Courses" asp-route-id="@Model.Id">Courses</a></li>
+	<li><a style="color:#007bff">Profile</a></li>
+}
+@section LinkExist{
+	Profile
+}
+<div class="row align-items-center">
+	<div class="col-lg-6 d-flex justify-content-center flex-column">
+		<div style="width:max-content" >
+		<img width="250" class="rounded" src="~/image/Student/@Model.ExistingImage" />
+		<a class="w-100 text-white mt-2 btn btn-primary d-block" asp-action="Edit" asp-route-id="@Model.Id">Update Data</a>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<h4>Name : @Model.Name </h4>
+		<h4>Adress : @Model.Adress </h4>
+		<h4>Age : @Model.Age </h4>
+		<h4>Gender : @Model.Gender </h4>
+		<h4>Phone : @Model.Phone </h4>
+	</div>
+</div>
+<div class="MyCourses mt-3 " >
+	<h3 style="border-bottom: 3px solid #007bff;width: max-content;" >My Courses</h3>
+	<div>
+		
+		<table class="table table-striped table-bordered mt-3">
+			<thead class="table-dark">
+				<th>Name Department</th>
+				<th>Name Instrucor</th>
+				<th>Courses</th>
+				<th>Evaluation</th>
+				<th>Details</th>
+			</thead>
+			<tbody>
+				@foreach (var item in ViewBag.AllCoursesStd as List<StudentCourse>)
+				{
+					<tr>
+						<td>
+							@{Department Dept = db.Departments.FirstOrDefault(d => d.Id == item.DepratmentId);}
+							@Dept.Name
+						</td>
+						<td>
+							@{Instructor Inst = db.Instructors.FirstOrDefault(i => i.Id == item.InstructorId);}
+							@Inst.Name
+						</td>
+						<td class="row m-0" >
+							@{var Crses = db.InstructorCourses.Where(c => c.InstructorId == item.InstructorId).ToList();}
+							@foreach (var items in Crses)
+							{
+								var Crs = db.Courses.FirstOrDefault(crs => crs.Id == items.CoursesId);
+								<p class="m-1">
+								@Crs.Name
+								</p>
+							}
+						</td>
+							@{
+								var DE = db.ResultStudents.Where 
+								(r => 
+									r.DpartmentId == Dept.Id &&
+									r.InstructorId == Inst.Id &&
+									r.IdStudent == Model.Id
+								).ToList();
+								var total = db.InstructorCourses.Where(I => I.InstructorId == Inst.Id).Count();
+								total *= 100;
+								int Sum = 0;  
+								foreach (var items in DE) {Sum +=  items.Degree;}
+							}
+						@if(Sum != 0){
+                         @if(total /2 > Sum)
+							{
+							<td class="bg-danger text-white">
+								@Sum of @total<br>
+							   راسب
+							</td>
+							}
+							else
+							{
+							<td class="bg-success text-white">
+								@Sum of @total <br>
+								ناجح
+							</td>
+							}
+						}
+						else
+						{
+							<td></td>
+						}
+						<td class="text-center">
+						<a asp-action="DetailsEvaluation" asp-route-id="@Model.Id" asp-route-iddept="@item.DepratmentId"asp-route-idinst="@item.InstructorId" class="btn btn-secondary">details</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>	

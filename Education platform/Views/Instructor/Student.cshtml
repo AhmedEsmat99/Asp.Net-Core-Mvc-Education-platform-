@@ -1,0 +1,51 @@
+﻿@model Instructor
+@{
+    ViewData["Title"] = "Student";
+    Layout = "_InstructorLayout";
+    ProjectDb db =new ProjectDb();
+}
+   @section NavbarLinks{
+        <li class=""><a class="nav-link" asp-action="index"asp-controller="Instructor">Home</a></li>
+        <li class=""><a class="nav-link" asp-action="Profile"asp-controller="Instructor" asp-route-id="@Model.Id">Profile</a></li>
+        <li class=""><a class="nav-link active" asp-action="Student" asp-route-id="@Model.Id" asp-controller="Instructor">Student</a></li>
+   }
+   <section class="container">
+        <h1>Students</h1>
+        <hr />
+        <table class="table table-bordered table-striped text-center" >
+            <thead class="table-dark">
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Courses</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.AllStudent as List<StudentCourse>)
+               {
+                <tr>
+                    <td>
+                        @{Student std = db.Students.FirstOrDefault(s => s.Id == item.StudentId);}
+                        @std.Name
+                    </td>
+                    <td>@std.Age</td>
+                    <td>@std.Gender</td>
+                    <td class="row m-0 justify-content-center">
+                            @{var Crses = db.InstructorCourses.Where(c => c.InstructorId == item.InstructorId).ToList();}
+							@foreach (var items in Crses)
+							{
+								var Crs = db.Courses.FirstOrDefault(crs => crs.Id == items.CoursesId);
+								<p class="m-1">
+								@Crs.Name
+								</p>
+							}
+                    </td>
+                    <td>
+                        <a asp-action="EvaluationStudent" asp-route-IdDept="@item.DepratmentId" asp-route-IdInst="@item.InstructorId" asp-route-IdStd="@item.StudentId" class="font-weight-bold btn btn-outline-primary">Evaluation</a>
+                    </td>
+                </tr>
+               }
+            </tbody>
+        </table>
+   </section>
+

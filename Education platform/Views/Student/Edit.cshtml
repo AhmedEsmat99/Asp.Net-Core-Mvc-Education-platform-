@@ -1,0 +1,78 @@
+﻿@model StudentViewModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "_StudentLayout";
+}
+@section NavbarLinks{
+    <li><a asp-action="Index">Home</a></li>
+	<li><a href="#">About us</a></li>
+	<li><a asp-action="Index"asp-controller="Courses" asp-route-id="@Model.Id">Courses</a></li>
+	<li><a style="color:#007bff" asp-action="Profile">Profile</a></li>
+}
+@section LinkExist{
+	Profile / Edit
+}
+<h3>Edit</h3>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="text-uppercase">Edit Speaker</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <input asp-for="Gender" type="hidden"/>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ExistingImage" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="photo" class="control-label"></label>
+                        <div class="custom-file">
+                            <input asp-for="photo" class="custom-file-input" />
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                        <span asp-validation-for="photo" class="text-danger"></span>
+                        <img src="~/image/Student/@Model.ExistingImage" class="img-thumbnail" height="80" width="80" asp-append-version="true" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Adress" class="control-label"></label>
+                        <input asp-for="Adress" class="form-control" />
+                        <span asp-validation-for="Adress" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Age" class="control-label"></label>
+                        <input asp-for="Age" class="form-control" />
+                        <span asp-validation-for="Age" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Phone" class="control-label"></label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-success rounded-0"> Update</button>
+                <a asp-action="Profile" asp-route-id="@Model.Id" class="btn btn-sm btn-primary rounded-0"> Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>

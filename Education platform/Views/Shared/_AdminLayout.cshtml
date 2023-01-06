@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>WebUni - Education Template</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i" rel="stylesheet">
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="/css/owl.carousel.css"/>
+	<link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+	<section class="course-section pb-0">
+		<div class="">
+			@if (User.Identity.IsAuthenticated)
+			{
+			<nav class=" d-flex justify-content-center align-items-center bg-light pt-3 pb-3">
+				<ul class="course-filter controls p-0 m-0 ">
+					@if(User.Identity.IsAuthenticated){
+						<a asp-action="Logout" class="btn btn-danger">Logout</a>
+					}
+					else
+					{
+						<a asp-action="RegisterAdmin" class="btn btn-danger">Register</a>
+						<a asp-action="Login" class="btn btn-danger">Login</a>
+					}
+					<li class="control"><a class="btn btn-secondary" asp-action="Index">Home</a></li>
+					<li class="control text-primary"style="border-bottom: 4px solid #007bff;">Admin : @User.Identity.Name</li>
+
+				</ul>                                       
+			</nav>
+			}
+			<div class=" container course-items-area d-flex flex-column mt-5 ">
+				<div>
+					@RenderBody()
+				</div>
+			</div>
+		</div>
+	</section>
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	<!--====== Javascripts & Jquery ======-->
+	<script src="/js/jquery-3.2.1.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/mixitup.min.js"></script>
+	<script src="/js/circle-progress.min.js"></script>
+	<script src="/js/owl.carousel.min.js"></script>
+	<script src="/js/main.js"></script>
+	@await RenderSectionAsync("scripts", required: false)
+</body>
+</html>

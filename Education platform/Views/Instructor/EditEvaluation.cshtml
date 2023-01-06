@@ -1,0 +1,37 @@
+﻿@model Education_platform.Models.ResultStudent
+
+@{
+    ViewData["Title"] = "EditEvaluation";
+    Layout = "_InstructorLayout";
+    ProjectDb db =new ProjectDb();
+}
+@section NavbarLinks{
+    <li><a class="nav-link" asp-action="index">Home</a></li>
+    <li><a class="nav-link" asp-action="Profile"asp-route-id="@Model.InstructorId">Profile</a></li>
+    <li><a class="nav-link" asp-action="Student" asp-route-id="@Model.InstructorId" >Student</a></li>
+    <li><a class="nav-link active text-white" >Edit Evaluation</a></li>
+}
+<section class="container">
+    <h1>EditEvaluation</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditEvaluation">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="IdCourse" type="hidden"  />
+                    <input asp-for="InstructorId" type="hidden"  />
+                    <input asp-for="DpartmentId" type="hidden"  />
+                    <input asp-for="IdStudent" type="hidden"  />
+                <div class="form-group">
+                    <label asp-for="Degree" class="control-label"></label>
+                    <input asp-for="Degree" class="form-control" />
+                    <span asp-validation-for="Degree" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,65 @@
+﻿@model InstructorViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "AddCoursesInstructor";
+    //SelectList selectLists = new SelectList(ViewBag.ins,"Id","Name");
+    ProjectDb db = new ProjectDb();
+    var result = db.coursesDepartments.Where(cd => cd.DeaprtmentId == Model.Idept).ToList();
+    var ResultCrsInst = db.InstructorCourses.Where(I => I.InstructorId == Model.IdInst).ToList();
+}
+
+<div class="d-flex flex-column align-items-center">
+<h4>Add Courses Instructor</h4>
+<form asp-action="AddCoursesInstructor">
+    
+    <div class="row contact-form">
+        <div class="col-md-6 d-flex">
+            <input type="hidden" asp-for="IdInst" value="@Model.IdInst" />
+            <select asp-for="IdCrs" required class="form-control w-auto ">
+                <option selected disabled >Select Course</option>
+                @foreach(var item in result)
+                {
+                        <option value="@item.CoursesId" >
+                            @{Courses C = db.Courses.FirstOrDefault(c => c.Id == item.CoursesId);} @C.Name
+                        </option>
+                    }
+            </select>
+        </div>
+        <div class="col-md-6">
+        <input type="submit" value="AddCoursess" class="btn btn-success" />
+        </div>
+    </div>
+</form>
+<table class="table table-bordered w-50 text-center">
+    <thead class="table-dark text-center">
+        <th>
+            Courses
+        </th>
+        <th>
+            Action
+        </th>
+    </thead>
+    <tbody>
+        @foreach (var item in ResultCrsInst)
+       {
+           <tr>
+               <td>
+                    @{ Courses CRs = db.Courses.FirstOrDefault(c => c.Id == @item.CoursesId);}
+                    @CRs.Name
+               </td>
+                <td class="text-center">
+                 <form asp-action="DeletInstructorCourse">
+                    <input type="hidden" asp-for="IdCrs" value="@item.CoursesId">
+                    <input type="hidden" asp-for="IdInst" value="@Model.IdInst">
+                    <button type="submit" class="btn btn-danger" >Delet</button>
+                 </form>
+               </td>
+           </tr>
+       }
+    </tbody>
+</table>
+<div class="d-flex ">
+<a asp-action="Instructor" class="btn btn-primary"> Back To List </a>
+<a asp-action="DeletAllCoursesInstructtor" asp-route-id="@Model.IdInst" class="btn btn-danger ml-5">Delet All</a>
+</div>
+</div>

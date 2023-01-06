@@ -1,0 +1,261 @@
+﻿@model StudentViewModel
+@{
+	Layout = "";
+	ProjectDb db = new ProjectDb();
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Educationplatform</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i" rel="stylesheet">
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="/css/owl.carousel.css"/>
+	<link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+	<!-- Header section -->
+	<header class="header-section">
+		<div class="container">
+			<div class="row">
+				<div class="d-flex w-100 justify-content-end mr-5 ">
+					@if(User.Identity.IsAuthenticated){
+						<div class="mr-3 bg-white rounded-circle d-flex justify-content-center" style="width:3.7rem; height: 4rem;">
+							<img class="rounded-circle " width="60" src="~/image/Student/@Model.ExistingImage" />
+						</div>
+						<div>
+						<a asp-action="Logout"  class="btn btn-primary ml-3 header-btn">Logout</a>
+						</div>
+					}
+					else
+					{
+					<a asp-action="Login" asp-controller="Account" class="btn btn-primary ml-3 header-btn">Login</a>
+					<a asp-action="Register" asp-controller="Student"  class="btn btn-primary ml-3 header-btn">Register</a>
+					}
+				</div>
+				<div class="col-lg-3 col-md-3">
+					<div class="nav-switch">
+						<i class="fa fa-bars"></i>
+					</div>
+				</div>
+				
+				<div class="col-lg-9 col-md-9">
+					<nav class="main-menu">
+						<ul>
+						@if(User.Identity.IsAuthenticated){
+							<li><a asp-action="Index" asp-controller="Student">Home</a></li>
+							<li><a href="#">About us</a></li>
+							<li><a asp-action="Index"asp-controller="Courses" asp-route-id="@Model.Id">Courses</a></li>
+							<li><a asp-action="Profile" asp-route-id="@Model.Id">Profile</a></li>
+						}else{
+							<li><a href="index.html">Home</a></li>
+							<li><a href="#">About us</a></li>
+							<li><a asp-action="Index"asp-controller="Courses">Courses</a></li>
+						}
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- Header section end -->
+
+	<!-- Hero section -->
+	<section class="hero-section set-bg" data-setbg="/img/bghome.png">
+		<div class="container">
+			<div class="hero-text text-white">
+				@if(User.Identity.IsAuthenticated){
+				<h3>Wellcome : @Model.Name</h3>
+				}
+				<h2>Get The Best Free Online Courses</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla <br> dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+			</div>
+			<div class="row">
+				<div class="col-lg-10 offset-lg-1 text-center">
+					@if(User.Identity.IsAuthenticated == false)
+					{
+						<a asp-action="Register" class="btn btn-primary">Sign Up Now</a>
+					}
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Hero section end -->
+
+	<!-- categories section -->
+	<section class="categories-section spad">
+		<div class="container">
+			<div class="section-title">
+				<h2>Our Course Categories</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+			</div>
+			<div class="row">
+				<!-- categorie -->
+				@if (User.Identity.IsAuthenticated)
+				{
+					@foreach (var item in ViewBag.DataDept as List<Department>)
+					{
+					<div class="col-lg-4 col-md-6">
+						<a asp-action="AllInst" asp-controller="Courses" asp-route-idDept="@item.Id" asp-route-idStd="@Model.Id">
+							<div class="categorie-item">
+								<div class="ci-thumb set-bg" style="background-position: center;" data-setbg="/image/Department/@item.image"></div>
+								<div class="ci-text">
+									<h5>@item.Name;</h5>
+									<p>Lorem ipsum dolor sit amet, consectetur</p>
+									<span> 
+											@{var count =db.coursesDepartments.Where(c => c.DeaprtmentId ==item.Id).Count(); }@count Courses
+									</span> 
+									<span class="students d-block">
+										@{var CountInst =db.Instructors.Where(i=>i.IdDept == item.Id).Count(); }@CountInst Instructor
+									</span>
+								</div>
+							</div>
+						</a>
+					</div>
+					}
+				}
+				else
+				{
+					@foreach (var item in ViewBag.DataDept as List<Department>)
+					{
+					<div class="col-lg-4 col-md-6">
+						<a asp-action="AllInst" asp-controller="Courses" asp-route-idDept="@item.Id">
+							<div class="categorie-item">
+								<div class="ci-thumb set-bg" style="background-position: center;" data-setbg="/image/Department/@item.image"></div>
+								<div class="ci-text">
+									<h5>@item.Name;</h5>
+									<p>Lorem ipsum dolor sit amet, consectetur</p>
+									<span> 
+											@{var count =db.coursesDepartments.Where(c => c.DeaprtmentId ==item.Id).Count(); }@count Courses
+									</span> 
+									<span class="students d-block">
+										@{var CountInst =db.Instructors.Where(i=>i.IdDept == item.Id).Count(); }@CountInst Instructor
+									</span>
+								</div>
+							</div>
+						</a>
+					</div>
+					}
+				}
+			</div>
+		</div>
+	</section>
+	<!-- categories section end -->
+	@if (User.Identity.IsAuthenticated == false)
+	{
+		<!-- banner section -->
+		<section class="banner-section spad">
+			<div class="container">
+				<div class="section-title mb-0 pb-2">
+					<h2>Join Our Community Now!</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+				</div>
+				<div class="text-center pt-5">
+					<a asp-action="Register" asp-controller="Student"  class="site-btn">Register Courses Now</a>
+				</div>
+			</div>
+		</section>
+		<!-- banner section end -->
+	}
+
+
+	<!-- footer section -->
+	<footer class=" footer-section text-center text-lg-start bg-white text-muted">
+      <!-- Section: Social media -->
+      <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+        <!-- Left -->
+        <div class="me-5 d-none d-lg-block">
+          <span>Get connected with us on social networks:</span>
+        </div>
+      </section>
+      <!-- Section: Social media -->
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start mt-5">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+              <!-- Content -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                <i class="fas fa-gem me-3 text-secondary"></i>Education Platform
+              </h6>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Et praesentium qui dicta quod in 
+                nemo harum vitae dolorem non veniam suscipit,
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                Products
+              </h6>
+              <p>
+                <a href="#!" class="text-reset">Courses</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Courses</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Courses</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Courses</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                Useful links
+              </h6>
+              <p>
+                <a href="#!" class="text-reset">Link</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Link</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Link</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Link</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+              <p><i class="fas fa-home me-3 text-secondary"></i> http://ahmedesmat.rf.gd</p>
+              <p>
+                <i class="fas fa-envelope me-3 text-secondary"></i>
+                ahmed2211esmat@gmail.com
+              </p>
+              <p><i class="fas fa-phone me-3 text-secondary"></i> +20123703441</p>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+      <hr>
+    </footer> 
+	<!-- footer section end -->
+
+	<!--====== Javascripts & Jquery ======-->
+	<script src="/js/jquery-3.2.1.min.js"></script>
+	<script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+﻿@model StudentViewModel
+@{
+    Layout = "_StudentLayout";  
+	ProjectDb db =new ProjectDb();
+    }
+
+@section NavbarLinks{
+	@if (User.Identity.IsAuthenticated)
+	{
+		<li><a asp-action="Index" asp-controller="Student"asp-route-id="@Model.Id">Home</a></li>
+		<li><a href="#">About us</a></li>
+		<li><a style="color:#007bff" asp-action="Index">Courses</a></li>
+		<li><a  asp-action="Profile" asp-controller="Student" asp-route-id="@Model.Id">Profile</a></li>
+	}
+	else
+	{
+		<li><a asp-action="Index" asp-controller="Student">Home</a></li>
+		<li><a href="#">About us</a></li>
+		<li><a style="color:#007bff" asp-action="Index">Courses</a></li>
+	}
+}
+@section LinkExist{
+	Courses
+}
+
+<section class="course-section spad pb-0">
+	<div class="course-warp">
+		<ul class="course-filter controls">
+			<li class="control active" data-filter="all">All</li>
+			@foreach (var item in ViewBag.AllDept as List<Department>)
+		    {
+			  var a = String.Concat(item.Name.Where(c => !Char.IsWhiteSpace(c)));
+			  <li class="control"data-filter=".@a">@item.Name</li>
+		    }
+		</ul>                                       
+		<div class="row course-items-area">
+			@if (User.Identity.IsAuthenticated)
+			{
+			<!-- course -->
+			@foreach (var item in ViewBag.AllDept as List<Department>)
+		    {
+			  var a = String.Concat(item.Name.Where(c => !Char.IsWhiteSpace(c)));
+				<div class="mix col-lg-3 col-md-4 col-sm-6 @a ">
+					<a asp-action="AllInst"asp-route-idDept="@item.Id" asp-route-idStd="@Model.Id">
+						<div class="course-item">
+							<div class="course-thumb set-bg" data-setbg="/image/Department/@item.image">
+								<div class="price">Price: Free</div>
+							</div>
+							<div class="course-info">
+								<div class="course-text">
+									<h5>@item.Name</h5>
+									<p>Lorem ipsum dolor sit amet, consectetur</p>
+									<div class="students">@{var count =db.coursesDepartments.Where(c => c.DeaprtmentId ==item.Id).Count(); }@count Courses</div>
+									<div class="students">@{var CountInst =db.Instructors.Where(i=>i.IdDept == item.Id).Count(); }@CountInst Instructor</div>
+								</div>
+								<div class="course-author">
+									<div class="ca-pic set-bg" data-setbg="/image/Department/@item.image"></div>
+									<p><span>@item.Name</span></p>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				}
+			}
+			else
+			{
+				@foreach (var item in ViewBag.AllDept as List<Department>)
+		    {
+			  var a = String.Concat(item.Name.Where(c => !Char.IsWhiteSpace(c)));
+				<div class="mix col-lg-3 col-md-4 col-sm-6 @a ">
+					<a asp-action="AllInst"asp-route-idDept="@item.Id" >
+						<div class="course-item">
+							<div class="course-thumb set-bg" data-setbg="/image/Department/@item.image">
+								<div class="price">Price: Free</div>
+							</div>
+							<div class="course-info">
+								<div class="course-text">
+									<h5>@item.Name</h5>
+									<p>Lorem ipsum dolor sit amet, consectetur</p>
+									<div class="students">@{var count =db.coursesDepartments.Where(c => c.DeaprtmentId ==item.Id).Count(); }@count Courses</div>
+									<div class="students">@{var CountInst =db.Instructors.Where(i=>i.IdDept == item.Id).Count(); }@CountInst Instructor</div>
+								</div>
+								<div class="course-author">
+									<div class="ca-pic set-bg" data-setbg="/image/Department/@item.image"></div>
+									<p><span>@item.Name</span></p>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				}
+			}
+		</div>
+			
+		@*<div class="featured-courses">
+			<div class="featured-course course-item">
+				<div class="course-thumb set-bg" data-setbg="/img/courses/f-1.jpg">
+					<div class="price">Price: $15</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6 offset-lg-6 pl-0">
+						<div class="course-info">
+							<div class="course-text">
+								<div class="fet-note">Featured Course</div>
+								<h5>HTNL5 & CSS For Begginers</h5>
+								<p>Lorem ipsum dolor sit amet, consectetur. Phasellus sollicitudin et nunc eu efficitur. Sed ligula nulla, molestie quis ligula in, eleifend rhoncus ipsum. Donec ultrices, sem vel efficitur molestie, massa nisl posuere ipsum, ut vulputate mauris ligula a metus. Aenean vel congue diam, sed bibendum ipsum. Nunc vulputate aliquet tristique. Integer et pellentesque urna</p>
+								<div class="students">120 Students</div>
+							</div>
+							<div class="course-author">
+								<div class="ca-pic set-bg" data-setbg="img/authors/1.jpg"></div>
+								<p>William Parker, <span>Developer</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="featured-course course-item">
+				<div class="course-thumb set-bg" data-setbg="/img/courses/f-2.jpg">
+					<div class="price">Price: $15</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6 pr-0">
+						<div class="course-info">
+							<div class="course-text">
+								<div class="fet-note">Featured Course</div>
+								<h5>HTNL5 & CSS For Begginers</h5>
+								<p>Lorem ipsum dolor sit amet, consectetur. Phasellus sollicitudin et nunc eu efficitur. Sed ligula nulla, molestie quis ligula in, eleifend rhoncus ipsum. Donec ultrices, sem vel efficitur molestie, massa nisl posuere ipsum, ut vulputate mauris ligula a metus. Aenean vel congue diam, sed bibendum ipsum. Nunc vulputate aliquet tristique. Integer et pellentesque urna</p>
+								<div class="students">120 Students</div>
+							</div>
+							<div class="course-author">
+								<div class="ca-pic set-bg" data-setbg="img/authors/2.jpg"></div>
+								<p>William Parker, <span>Developer</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>*@
+	</div>
+</section>
+	<!-- course section end -->
+
+
+	<!-- banner section -->
+	@if(User.Identity.IsAuthenticated == false){
+		<section class="banner-section spad">
+			<div class="container">
+				<div class="section-title mb-0 pb-2">
+					<h2>Join Our Courses Now!</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+				</div>
+				<div class="text-center pt-5">
+					<a href="#" class="site-btn">Register Now</a>
+				</div>
+			</div>
+		</section>
+	}
+	<!-- banner section end -->
+	@section Scripts{
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/mixitup.min.js"></script>
+		<script src="/js/circle-progress.min.js"></script>
+		<script src="/js/owl.carousel.min.js"></script>
+	}

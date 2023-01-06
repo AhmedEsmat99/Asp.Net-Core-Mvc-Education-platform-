@@ -1,0 +1,82 @@
+﻿@model CoursesDepartmentViewModel
+@{
+    ViewData["Title"] = "CoursesDept";
+    Layout = "_AdminLayout";
+    ProjectDb db = new ProjectDb();
+}
+    <hr />
+<div class="d-flex flex-column align-items-center">
+<h4>Add Courses Instructor</h4>
+@if(Model.IdCrs !=0){
+    <div class="alert alert-success" role="alert">
+        complete successfully
+    </div>
+}
+<form asp-action="Dept" class="w-100"style="border: 2rem solid #d6d6d6;">
+    <div class="row contact-form">
+        <div class="col-md-8 d-flex">
+            <div class="form-group">
+                <h3  class="control-label mb-2"> Which of the following sections would you like to add courses to?</h3>
+                <select name="Id" class="form-control">
+                    <option selected disabled>SelectDepartment</option>
+                    @foreach (var item in ViewBag.AllDept as List<Department>)
+                   {
+                       <option value="@item.Id">@item.Name</option>
+                   }
+                </select>
+                <span  class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-center align-items-center">
+        <input  type="submit" value="Select Department" class="btn btn-success" />
+        </div>
+    </div>
+</form>
+@if(Model.IdDept != 0){
+<div class="row d-flex w-100 mb-5 p-5" style="border: 1rem solid #d6d6d6; border-top:none">
+    <div class="col-lg-4">
+        <h4>@Model.NameDept :-</h4>
+    </div>
+    <div class="col-lg-8">
+        <form class="d-flex" asp-action="InsertCrsDept">
+            <input type="hidden" asp-for="IdDept" value="@Model.IdDept">
+            <select asp-for="IdCrs" class="form-control">
+                @foreach (var item in ViewBag.AllCrs as List<Courses>)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+            <button class="btn btn-success pr-5 pl-5 ml-5">Save</button>
+        </form>
+    </div>  
+</div>
+}
+<table class="table table-bordered mt-5 text-center">
+    <thead class="table-dark text-center">
+        <th>Department</th>
+        <th>Course</th>
+        <th> Action</th>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.AllCrsDept as List<CoursesDepartment>)
+       {
+          <tr>
+              <td>
+                @{Department department = db.Departments.FirstOrDefault(d => d.Id == item.DeaprtmentId);}
+                @department.Name
+              </td>
+              <td>
+                  @{Courses Crs = db.Courses.FirstOrDefault(c=> c.Id == item.CoursesId);}
+                @Crs.Name
+              </td>
+              <td>
+                <a asp-action="DeletCrsDept" asp-route-IdDept="@item.DeaprtmentId" asp-route-IdCrs="@item.CoursesId"class="btn btn-danger">Delet</a>
+              </td>
+          </tr>
+       }
+    </tbody>
+</table>
+<div class="d-flex ">
+<a asp-action="Courses" class="btn btn-primary"> Back To List </a>
+</div>
+</div>

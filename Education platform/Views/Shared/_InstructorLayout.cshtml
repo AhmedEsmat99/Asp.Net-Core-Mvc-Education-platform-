@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+   <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <title>@ViewBag.Title</title>
+   <style>
+       nav ul li{
+           padding:.5rem 1rem ;
+           margin:1rem;
+       }
+       nav ul li a{color:#000}
+       nav div {right:1rem;top:20%}
+       .FirstSection{ background: #f1f3ff;}
+        @RenderSection("Style", required: false)
+   </style>
+</head>
+<body>
+
+  <div class="container-fuild" >
+      <nav class="nav nav-pills flex-sm-row bg-light position-sticky"style="top:0; z-index:1;">
+          <ul class="nav w-100 justify-content-center">
+            @RenderSection("NavbarLinks",required:false)
+          </ul>
+          <div class="position-absolute">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Logout" asp-controller="Account" class="btn btn-danger text-white">Logout</a>
+                }
+                else{
+                    <a href=""class="btn btn-primary text-white">Login</a>
+                    <a href="" class="btn btn-primary text-white">Register</a>
+                }
+          </div>
+        </nav>
+        @RenderSection("Header", required: false)
+    <section class="FirstSection  container-fuild pt-5 pb-5">
+        @RenderBody()
+    </section>
+    <!-- Footer -->
+    <footer class=" text-center text-lg-start bg-white text-muted">
+      <!-- Section: Social media -->
+      <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+        <!-- Left -->
+        <div class="me-5 d-none d-lg-block">
+          <span>Get connected with us on social networks:</span>
+        </div>
+      </section>
+      <!-- Section: Social media -->
+
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start mt-5">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+              <!-- Content -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                <i class="fas fa-gem me-3 text-secondary"></i>Education Platform
+              </h6>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Et praesentium qui dicta quod in 
+                nemo harum vitae dolorem non veniam suscipit,
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                Products
+              </h6>
+              <p>
+                <a href="#!" class="text-reset">Courses</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Courses</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Courses</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Courses</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                Useful links
+              </h6>
+              <p>
+                <a href="#!" class="text-reset">Link</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Link</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Link</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Link</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+              <p><i class="fas fa-home me-3 text-secondary"></i> http://ahmedesmat.rf.gd</p>
+              <p>
+                <i class="fas fa-envelope me-3 text-secondary"></i>
+                ahmed2211esmat@gmail.com
+              </p>
+              <p><i class="fas fa-phone me-3 text-secondary"></i> +20123703441</p>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+      <hr>
+    </footer>
+    <!-- Footer -->
+  </div>
+    @RenderSection("Scripts", required: false)
+    <script src="~/js/bootstrap5.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

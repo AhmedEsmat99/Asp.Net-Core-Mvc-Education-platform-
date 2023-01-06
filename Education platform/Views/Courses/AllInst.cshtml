@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "AllInst";
+    Layout = "_StudentLayout";
+	ProjectDb db =new ProjectDb();
+}
+
+@section NavbarLinks{
+	@if (User.Identity.IsAuthenticated)
+	{
+		<li><a asp-action="Index" asp-controller="Student">Home</a></li>
+		<li><a href="#">About us</a></li>
+		<li><a style="color:#007bff" asp-route-id="@Model.Id" asp-action="Index">Courses</a></li>
+		<li><a  asp-action="Profile" asp-controller="Student" asp-route-id="@Model.Id">Profile</a></li>
+	}
+	else
+	{
+		<li><a asp-action="Index" asp-controller="Student">Home</a></li>
+		<li><a href="#">About us</a></li>
+		<li><a style="color:#007bff"  asp-action="Index">Courses</a></li>
+	}
+}
+@section LinkExist{
+	Courses / AllInst
+}
+<style>
+	.Inst:hover{
+		transition: .5s;
+		box-shadow: 0px 0px 12px 0px #0000003b;
+	}
+</style>
+<div class="row course-items-area">
+		@if (User.Identity.IsAuthenticated)
+	{
+		@foreach (var item in ViewBag.AllInstInDept as List<Instructor>)
+		{
+			Department Dept = db.Departments.FirstOrDefault(d=>d.Id == item.IdDept);
+			<div class="Inst mix col-lg-3 col-md-4 col-sm-6 m-1">
+				<a asp-action="DetailsDepartment" asp-controller="Courses" asp-route-idDept="@item.IdDept" asp-route-idInst="@item.Id" asp-route-idStd="@Model.Id">
+					<div class="course-item ">
+						<div class="course-thumb set-bg d-flex justify-content-center align-items-end" data-setbg="/image/Department/@Dept.image">
+						<div class="price position-absolute" style="top:0;left:0;">Price: Free</div>
+						<div class="text-center">
+							<img width="100" style="height: 6rem;" class="rounded-circle imageinst" src="/image/instructor/@item.Image">
+						</div>
+						</div>
+						<div class="course-info">
+							<div class="course-text">
+								<h5>@item.Name</h5>
+								<p class="m-0" >Courses:</p>
+								<div class=" row"> 
+									@{var AllCourse = db.InstructorCourses.Where(c => c.InstructorId == item.Id).ToList();}
+									@foreach (var courses in AllCourse)
+									{
+										var Crs = db.Courses.FirstOrDefault(c => c.Id == courses.CoursesId);
+										<p class="m-2 "> @Crs.Name </p>
+									}
+								</div>
+							</div>
+							<div class="course-author">
+								<div class="ca-pic set-bg" data-setbg="/image/instructor/@item.Image"></div>
+								<p><span>@item.Name</span></p>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		}
+	}
+	else
+	{
+		@foreach (var item in ViewBag.AllInstInDept as List<Instructor>)
+		{
+			Department Dept = db.Departments.FirstOrDefault(d=>d.Id == item.IdDept);
+			<div class="Inst mix col-lg-3 col-md-4 col-sm-6 m-1">
+				<a asp-action="DetailsDepartment" asp-controller="Courses" asp-route-idDept="@item.IdDept" asp-route-idInst="@item.Id" >
+					<div class="course-item ">
+						<div class="course-thumb set-bg d-flex justify-content-center align-items-end" data-setbg="/image/Department/@Dept.image">
+						<div class="price position-absolute" style="top:0;left:0;">Price: Free</div>
+						<div class="text-center">
+							<img width="100" class="rounded-circle" src="/image/instructor/@item.Image">
+						</div>
+						</div>
+						<div class="course-info">
+							<div class="course-text">
+								<h5>@item.Name</h5>
+								<p class="m-0" >Courses:</p>
+								<div class=" row"> 
+									@{var AllCourse = db.InstructorCourses.Where(c => c.InstructorId == item.Id).ToList();}
+									@foreach (var courses in AllCourse)
+									{
+										var Crs = db.Courses.FirstOrDefault(c => c.Id == courses.CoursesId);
+										<p class="m-2 "> @Crs.Name </p>
+									}
+								</div>
+							</div>
+							<div class="course-author">
+								<div class="ca-pic set-bg" data-setbg="/image/instructor/@item.Image"></div>
+								<p><span>@item.Name</span></p>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		}
+	}
+</div>

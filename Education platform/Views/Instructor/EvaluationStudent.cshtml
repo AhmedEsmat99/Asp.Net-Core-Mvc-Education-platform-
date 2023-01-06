@@ -1,0 +1,79 @@
+﻿@model ResultStudent
+@{
+    ViewData["Title"] = "EvaluationStudent";
+    Layout = "_InstructorLayout";
+    ProjectDb db =new ProjectDb();
+    var total = ViewBag.Count * 100;
+    var DE = db.ResultStudents.Where (r => r.DpartmentId == Model.DpartmentId &&r.InstructorId == Model.InstructorId &&r.IdStudent == Model.IdStudent).ToList();
+    int Sum = 0;  
+    foreach (var item in DE) {Sum +=  item.Degree;}
+}
+@section NavbarLinks{
+    <li><a class="nav-link" asp-action="index">Home</a></li>
+    <li><a class="nav-link" asp-action="Profile"asp-route-id="@Model.InstructorId">Profile</a></li>
+    <li><a class="nav-link" asp-action="Student" asp-route-id="@Model.InstructorId" >Student</a></li>
+    <li><a class="nav-link active" >Evaluation Student</a></li>
+}
+<div class="container">
+        <h3> Student : @ViewBag.NameStd</h3>
+        <table class="table table-bordered text-center">
+            <thead class="table-dark">
+                <th>Courses</th>
+                <th>Evaluation</th>
+                <th>Submit</th>
+            </thead>
+            <tbody>
+                
+                @foreach (var item in ViewBag.AllCourses as List<InstructorCourses>)
+                {
+                    <tr>
+                        <td>
+                            @{Courses Crs = db.Courses.FirstOrDefault(c => c.Id == item.CoursesId);
+                                @Crs.Name
+                            ResultStudent rs = db.ResultStudents.FirstOrDefault(r=>r.IdCourse == Crs.Id && r.InstructorId == Model.InstructorId && r.IdStudent == Model.IdStudent && r.DpartmentId == Model.DpartmentId);      
+                        }
+                       </td>
+                            <form asp-action="EvaluationStudent" method="post">
+                       <td class="p-0">
+                        <input asp-for="IdStudent"type="hidden">
+                        <input asp-for="InstructorId"type="hidden">
+                        <input asp-for="IdCourse"type="hidden"value="@Crs.Id">
+                        <input asp-for="DpartmentId"type="hidden">
+                        <input class="form-control" style="border: none;background: none;width: 100%;box-shadow: none;"
+                        value="@if(rs !=null){@rs.Degree;}"
+                        asp-for="Degree" >
+                       </td>
+                       <td>
+                           <input class="btn btn-success" type="submit" value="submit">
+                           <a asp-action="EditEvaluation" class="btn btn-primary text-white" 
+                           asp-route-idcrs="@Crs.Id"
+                           asp-route-iddept="@Model.DpartmentId"
+                           asp-route-idinst="@Model.InstructorId"
+                           asp-route-idstd="@Model.IdStudent">
+                               Edit </a>
+                       </td>
+                            </form> 
+                   </tr>
+               }
+            </tbody>
+              <tfoot>
+                  <td>Total (@total) <br />Result </td>
+                    @if(Sum != 0){
+                         @if(total /2 > Sum)
+                        {
+                        <td class="bg-danger text-white">
+                            @Sum of @total<br>
+                           راسب
+                        </td>
+                        }
+                        else
+                        {
+                        <td class="bg-success text-white">
+                            @Sum of @total <br>
+                            ناجح
+                        </td>
+                        }
+                    }
+              </tfoot>
+        </table>
+</div>
